@@ -14,7 +14,20 @@ MastermindBoard::~MastermindBoard() {
 //=======================================================================================
 //                               PUBLIC: ACCESSOR METHODS
 //=======================================================================================
-void Board::displayBoard(string boardString) {
+void MastermindBoard::displayBoard() {
+	string boardString = "";
+	string boardDataString;
+	ifstream boardTextFile;
+
+	if (*numAttempts == 0) {
+		boardTextFile.open(*boardFileName);
+		while (getline(boardTextFile, boardDataString)) {
+			boardString += boardDataString + "\n";
+		}
+	}
+	else {
+		boardString = generateBoardString();
+	}
 	cout << boardString << endl;
 }
 
@@ -53,63 +66,53 @@ string MastermindBoard::generateBoardString() {
 	string boardString = "";
 	string boardDataString;
 	ifstream boardTextFile;
+	string dataToAdd;
+	string lineToAdd;
+	int currentLine = 0;
 
-	if (*numAttempts == 0) {
-		boardTextFile.open(*boardFileName);
-		while (getline(boardTextFile, boardDataString)) {
-			boardString += boardDataString + "\n";
-		}
-	}
-	else {
-		string dataToAdd;
-		string lineToAdd;
-		int currentLine = 0;
+	while (getline(boardTextFile, boardDataString)) {
+		dataToAdd = "";
+		lineToAdd = boardDataString;
+	
+		if (currentLine == 8) {
+			int numCharacters = 13;
 
-		while (getline(boardTextFile, boardDataString)) {
-			dataToAdd = "";
-			lineToAdd = boardDataString;
-			if (currentLine == 8) {
-				int numCharacters = 13;
-
-				if (playerHints[int(*numAttempts - 1)] == "won") {
-					dataToAdd = "ACCESS GRANTED";
-					numCharacters = 14;
-				}
-				else {
-					dataToAdd = "ACCESS DENIED";
-				}
-
-				lineToAdd.replace(65, numCharacters, dataToAdd);
-				boardString += lineToAdd + "\n";
-			}
-			else if (currentLine == 9) {
-				dataToAdd = playerHints[int(*numAttempts - 1)];
-
-				if (dataToAdd == "won") {
-					dataToAdd = "    ";
-				}
-
-				lineToAdd.replace(69, 4, dataToAdd);
-				boardString += lineToAdd + "\n";
-			}
-			else if (currentLine == 13) {
-				for (int i = 0; i < 4; i++) {
-					char guessElement = playerAttempts[int(*numAttempts - 1)][i];
-					lineToAdd.replace((i + 1)*10, 1, string(1, guessElement));
-				}
-
-				boardString += lineToAdd + "\n";
+			if (playerHints[int(*numAttempts - 1)] == "won") {
+				dataToAdd = "ACCESS GRANTED";
+				numCharacters = 14;
 			}
 			else {
-				boardString += boardDataString + "\n";
+				dataToAdd = "ACCESS DENIED";
 			}
 
-			currentLine += 1;
+			lineToAdd.replace(65, numCharacters, dataToAdd);
+			boardString += lineToAdd + "\n";
+		}
+		else if (currentLine == 9) {
+			dataToAdd = playerHints[int(*numAttempts - 1)];
+
+			if (dataToAdd == "won") {
+				dataToAdd = "    ";
+			}
+
+			lineToAdd.replace(69, 4, dataToAdd);
+			boardString += lineToAdd + "\n";
+		}
+		else if (currentLine == 13) {
+			for (int i = 0; i < 4; i++) {
+				char guessElement = playerAttempts[int(*numAttempts - 1)][i];
+				lineToAdd.replace((i + 1)*10, 1, string(1, guessElement));
+			}
+
+			boardString += lineToAdd + "\n";
+		}
+		else {
+			boardString += boardDataString + "\n";
 		}
 
-		boardTextFile.close();
-		return boardString;
+		currentLine += 1;
 	}
+	
 	boardTextFile.close();
 	return boardString;
 }

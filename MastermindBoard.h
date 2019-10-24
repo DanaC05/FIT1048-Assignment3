@@ -16,6 +16,7 @@ public:
 
 	// accessor methods
 	void displayPlayerAttempts();
+	void displayBoard();
 	string generateBoardString();
 	string generateAttemptsString();
 	string generateHintData();

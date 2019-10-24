@@ -24,6 +24,8 @@ public:
 private:
 	// variables
 	bool* firstZero;
+	bool* firstExplanationGiven;
+	bool* guardsLeft;
 	string* zeroOptions;
 	string* repeatOptions;
 	const int* zeroSize = new int(7);

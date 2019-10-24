@@ -17,6 +17,8 @@ Ellie::Ellie() {
 
 Ellie::~Ellie() {
 	delete firstZero;
+	delete firstExplanationGiven;
+	delete guardsLeft;
 	delete zeroOptions;
 	delete repeatOptions;
 	delete zeroSize;
@@ -30,8 +32,14 @@ string Ellie::getDialogue(int phraseID, string insertInfo = "") {
 	string dialogueOutput = "";
 	switch (phraseID) {
 	case 1:
-		dialogueOutput = "Okay, they're gone. I think I've got about " + insertInfo + " tries at this door until one of them comes back.\nLet's do this";
-		break;
+		if (*guardsLeft) {
+			dialogueOutput = "Okay, they're gone. I think I've got about " + insertInfo + " tries at this door until one of them comes back.\nLet's do this";
+			*guardsLeft = false;
+		}
+		else {
+			dialogueOutput = "";
+		}
+			break;
 	case 2:
 		dialogueOutput = "I should really start working on this door...";
 		break;
@@ -47,9 +55,16 @@ string Ellie::getDialogue(int phraseID, string insertInfo = "") {
 		dialogueOutput = zeroOptions[zeroIndex];
 		break;
 	case 4:
-		dialogueOutput = "Hmm, it looks like the question marks mean I've got a " + insertInfo + " right but the wrong place... "
-			+ "and the circles mean I've got it in the right place! This should make things easier... "
-			+ "slightly.\n I better write this down.";
+		if (!*firstExplanationGiven) {
+			dialogueOutput = "Hmm, it looks like the question marks mean I've got a " + insertInfo + " right but the wrong place... "
+				+ "\nand the circles mean I've got it in the right place! This should make things easier... "
+				+ "slightly.\n                             I better write this down.                                   ";
+
+			*firstExplanationGiven = true;
+		}
+		else {
+			dialogueOutput = "";
+		}
 		break;
 	case 5:
 		int repeatIndex;
@@ -57,10 +72,10 @@ string Ellie::getDialogue(int phraseID, string insertInfo = "") {
 		dialogueOutput = repeatOptions[repeatIndex];
 		break;
 	case 6:
-		dialogueOutput = "The code definitely doesn't have those, I can only use " + insertInfo;
+		dialogueOutput = "The code definitely doesn't have those, pretty sure I can only use " + insertInfo + ".";
 		break;
 	case 7:
-		dialogueOutput = "Alright! Just one more to go. I can do this.";
+		dialogueOutput = "                    Alright! Just one more to go. I can do this.                      ";
 		break;
 	case 8:
 		dialogueOutput = "Crap! I can hear the guards downstairs. I better hurry, I think I can try two more times.";
@@ -85,27 +100,31 @@ string Ellie::getDialogue(int phraseID, string insertInfo = "") {
 //                               PRIVATE: MUTATOR METHODS
 //=======================================================================================
 	void Ellie::setEllieVariables() {
-		*firstZero = new bool(true);
-		
-		string phrasesZero[7] = {"Ugh, not even close.", "Nope, that's for sure not it.", "Annnnnd.... A whole lot of nada.",
-			"Yep... still a big fat zero.", "At this rate, I'm going to need a flame thrower to get in here.",
-			"C'mon, " + *playerName + "! \nI got this. \nEndure and Survive.",
-			"Why don't people write their keycodes on paper and leave them lying around anymore." };
+		firstZero = new bool(true);
+		firstExplanationGiven = new bool(false);
 
-		zeroOptions = new string[int(zeroSize)];
+		string phrasesZero[7] = { "                            Ugh, not even close.                                 ", 
+			"                             Nope, that's for sure not it.                            ", 
+			"                           Annnnnd.... A whole lot of nada.                           ",
+			"                            Yep... still a big fat zero.                              ", 
+			"           At this rate, I'm going to need a flame thrower to get in here.            ",
+			"           C'mon, " + *playerName + "! \nI got this. \nEndure and Survive.            ",
+			" Why don't people write their keycodes on paper and leave them lying around anymore  ." };
+
+		zeroOptions = new string[*zeroSize];
 		zeroOptions = phrasesZero;
 
-		
-		string phrasesRepeat[3] = { "Dammit, I've already tried that one. I need to think about this more carefully.",
-			"I think I already... \nYep, already tried it. C'mon " + *playerName + ", think!",
-			"Well if it didn't work the last time I don't know why it would now..." };
+		                                                       
+		string phrasesRepeat[3] = { "  Dammit, I've already tried that one. I need to think about this more carefully   .",
+			"                               I think I already...                                 \n                Yep, already tried it. C'mon " + *playerName + ", think!             ",
+			"        Well if it didn't work the last time I don't know why it would now...       " };
 
-		repeatOptions = new string[int(repeatSize)];
+		repeatOptions = new string[*repeatSize];
 		repeatOptions = phrasesRepeat;
 	}
 
 	void Ellie::resetEllieValues() {
-		*firstZero = new bool(true);
+		*firstZero = true;
 		resetScore();
 	}
 	

@@ -49,7 +49,7 @@ void Mastermind::runGame() {
 	displayLoadingScreen();
 
 	// display main menu and start game (based on player choice)////////////////TODO: add choice to ave game (allows to save progress without having to be in game)
-	mainMenuChoice();
+	int number = mainMenuChoice();
 
 	///////////////////////////////////////////////////////////////// TODO: add method to play one game - condition for load game as well
 	/// start game (based on menu choice
@@ -188,6 +188,83 @@ void Mastermind::displayPlayerUI() {
 	printTextFile(*uiFileName, 0, "\t\t\t\t");
 }
 
+bool Mastermind::checkAttemptValidity(string guess) {
+	for (int i = 0; i < guess.size(); i++) {
+		if (keycodeCharacters->find(guess[i]) == string::npos) {
+			return false;
+		}
+	}
+	
+	return true;
+}
+
+void Mastermind::displayRelevantDialogue(string hint, string guess) {
+	string playerDialogue;
+	string allGuesses = gameBoard->generateAttemptData();
+	string previousGuesses = allGuesses.substr(0, allGuesses.size() - 4);
+
+	int numberCorrect = 0;
+	for (int i = 0; i < 4; i++) {
+		if (hint[i] == 'o') {
+			numberCorrect += 1;
+		}
+	}
+	
+	if (!gameBoard->maxAttemptsReached()) {
+		// if no characters in hint are found in secret code
+		if (hint == "    ") {
+			playerDialogue = player->getDialogue(3);
+		}
+
+		// if player has already tried guess before
+		else if (previousGuesses.find(guess) != string::npos) {
+			playerDialogue = player->getDialogue(5);
+		}
+
+		// if player has only one character to go
+		else if (numberCorrect == 3) {
+			playerDialogue = player->getDialogue(7);
+		}
+
+		// if player has only two turns left
+		if (gameBoard->getMaxAttempts() - gameBoard->getNumAttempts() == 2) {
+			playerDialogue += "\n" + player->getDialogue(8);
+		}
+	}
+	// last attempt was made and code has not been broken
+	else {
+		playerDialogue = "";
+	}
+
+	if (playerDialogue != "") {
+		// clear screen
+		system("cls");
+
+		// display the board
+		gameBoard->displayBoard();
+
+		// display player dialogue
+		cout << "\t\t\t" << playerDialogue << endl;
+
+		// wait for player to continue
+		system("pause");
+	}
+
+}
+
+string Mastermind::askForString(string prompt) {
+	string userInput = "";
+
+	//print question and store cin in userInput;
+	while (userInput == "") {
+		cout << prompt;
+		cin.clear();
+		getline(cin, userInput);
+	}
+
+	return userInput;
+}
+
 bool Mastermind::isGameOver() {
 	// check if player has won or run out of attempts
 	return gameWon || gameBoard->maxAttemptsReached();
@@ -296,28 +373,28 @@ void Mastermind::setDifficulty() {
 		// get player selection
 		difficulty = windowsSelect(difficulties, 5, *selectFileName, "       ");
 
-// if selection is not 5 ('show game info')
-if (difficulty != 5) {
-	difficultySelected = true;
+		// if selection is not 5 ('show game info')
+		if (difficulty != 5) {
+			difficultySelected = true;
 
-	// set game difficulty
-	currentGameDifficulty = new int(difficulty);
+			// set game difficulty
+			currentGameDifficulty = new int(difficulty);
 
-	// give feedback
-	cout << "\n\n\n\n\n\t\t\t\t\t\t    Game is set to: " << difficulties[*currentGameDifficulty - 1] << "\n\n\n\n\n\n" << endl;
+			// give feedback
+			cout << "\n\n\n\n\n\t\t\t\t\t\t    Game is set to: " << difficulties[*currentGameDifficulty - 1] << "\n\n\n\n\n\n" << endl;
 
-	// wait for player to continue
-	system("pause");
-}
-else {
-	system("cls");
+			// wait for player to continue
+			system("pause");
+		}
+		else {
+			system("cls");
 
-	// display difficulty info
-	displayDifficultyInfo();
+			// display difficulty info
+			displayDifficultyInfo();
 
-	// wait for player to continue
-	system("pause");
-}
+			// wait for player to continue
+			system("pause");
+		}
 	}
 }
 
@@ -332,6 +409,7 @@ void Mastermind::generateSecretCode() {
 	case 3:
 	case 4:
 		keycodeCharacters = new string("abcdefghijklmnopqrstuvwxyz");
+		break;
 	}
 
 	int codeIndex;
@@ -353,8 +431,8 @@ void  Mastermind::playTurn() {
 	// display player choices
 	displayPlayerUI();
 
-	// get player choice
-
+	// get player choice and execute turn
+	executePlayerTurn(askForString("\t\t\t\t\t\t\t       "));
 }
 
 string Mastermind::generateHint(string guess) {
@@ -364,7 +442,7 @@ string Mastermind::generateHint(string guess) {
 
 	// for each part of player guess give hint
 	for (int i = 0; i < 4; i++) {
-		if (secretCode->find(guess) != string::npos) {
+		if (checkAttemptValidity(guess)) {
 			if (secretCode[i] == to_string(guess[i])) {
 				rightPlace += "o";
 			}
@@ -387,7 +465,9 @@ string Mastermind::generateHint(string guess) {
 }
 
 void Mastermind::executePlayerTurn(string playerChoice) {
-	if (playerChoice.find(" ")) {
+	string guess = "";
+	string hint = "";
+	if (playerChoice.find(" ") != string::npos) {
 		playerChoice.erase(remove(playerChoice.begin(), playerChoice.end(), ' '), playerChoice.end());
 	}
 
@@ -401,12 +481,24 @@ void Mastermind::executePlayerTurn(string playerChoice) {
 		//displayPlayerFeedback("Game saved successfully!");
 	}
 	else if (playerChoice == "H" || playerChoice == "h") {
-	//displayHelpInformation();
+		//displayHelpInformation();
 	}
-	else if (playerChoice == "M" || playerChoice == "") {
-		quitGame();
+	else if (playerChoice == "M" || playerChoice == "m") {
+		//quitGame();
 	}
-	else if (playerChoice.find(*keycodeElements))
+	else if (checkAttemptValidity(playerChoice)) {
+		guess = playerChoice;
+		hint = generateHint(guess);
+		gameBoard->addTurn(guess, hint);
+	}
+	else {
+		///////////////////////////////////////////////////////////// TODO: format output
+		cout << player->getDialogue(6, *keycodeElements) << endl;
+	}
+
+	if (hint != "") {
+		displayRelevantDialogue(hint, guess);
+	}
 }
 
 string Mastermind::generateSaveData() {
@@ -456,7 +548,7 @@ void Mastermind::saveGame() {
 	dataToWrite += generateSaveData();
 
 	// open mastermindSaveFile.txt
-	gameSaveFile.open("saveFiles/mastermindSaveFile.txt", ios::app);
+	gameSaveFile.open(*saveFileDirectory + "mastermindSaveFile.txt", ios::app);
 
 	// save game data
 	gameSaveFile << dataToWrite;

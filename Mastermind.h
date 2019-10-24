@@ -72,7 +72,8 @@ private:
 	void displayPlayerUI();
 	bool checkAttemptValidity(string guess);
 	void displayHelpInformation();
-	void displayPlayerFeedback(string feedback);
+	void displayRelevantDialogue(string hint, string guess);
+	string askForString(string prompt);
 	void newGame();
 	void loadGame();
 	bool isGameOver();

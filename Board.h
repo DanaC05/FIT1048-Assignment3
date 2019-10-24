@@ -12,7 +12,7 @@ public:
 	~Board();
 
 	// abstract methods
-	virtual void displayBoard(string boardString = "");
+	virtual void displayBoard() = 0;
 	virtual void boardSetup();
 	
 	// accessor methods
