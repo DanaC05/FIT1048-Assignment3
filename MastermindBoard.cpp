@@ -31,6 +31,10 @@ void MastermindBoard::displayBoard() {
 	cout << boardString << endl;
 }
 
+string MastermindBoard::validBoardSymbols() {
+	return *validSymbols;
+}
+
 void MastermindBoard::displayPlayerAttempts() {
 	string playerAttemptsData;
 	string playerAttemptsString = "";
@@ -169,13 +173,10 @@ string MastermindBoard::generateAttemptData() {
 //=======================================================================================
 //                               PRIVATE: MUTATOR METHODS
 //=======================================================================================
-void MastermindBoard::mastermindSetup() {
-	boardSetup();
+void MastermindBoard::boardSetup() {
+	numAttempts = new int(0);
 	playerAttempts = new string[int(*maxAttempts)];
 	playerHints = new string[int(*maxAttempts)];
 }
 
-void Board::boardSetup() {
-	numAttempts = new int(0);
-}
 

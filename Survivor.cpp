@@ -9,5 +9,5 @@ Survivor::Survivor() {
 	attemptsFileName = new string("previousAttempts/survivorAttempts.txt");
 	validSymbols = new string("letters a-z");
 	symbolGroup = new string("letter");
-	MastermindBoard::mastermindSetup();
+	boardSetup();
 }

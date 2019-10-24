@@ -9,5 +9,5 @@ Hard::Hard() {
 	attemptsFileName = new string("previousAttempts/hardAttempts.txt");
 	validSymbols = new string("!@#$%&*~?");
 	symbolGroup = new string("symbol");
-	MastermindBoard::mastermindSetup();
+	boardSetup();
 }

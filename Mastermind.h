@@ -14,6 +14,7 @@
 #include <array>
 #include <vector>
 #include <ctime>
+#include <stdexcept>
 #include "Ellie.h"
 #include "CustomPlayer.h"
 #include "Normal.h"
@@ -30,7 +31,7 @@ public:
 	~Mastermind();
 
 	// accessor methods
-	void runGame();
+	void startGame();
 	void testDisplay(); //to be removed when program is complete
 
 private:
@@ -46,9 +47,10 @@ private:
 	const string* enterFileName = new string("text/enterYourName.txt");
 	const string* selectFileName = new string("text/selectDifficulty.txt");
 	const string* wouldFileName = new string("text/wouldYouLikeTo.txt");
-	const string* saveFileDirectory = new string("saveFiles");
+	const string* saveFileName = new string("saveFiles/mastermindSaveFile.txt");
+	const string* wordLibraryName = new string("wordLibraries/secretCodeLibrary.txt");
+	const int* wordLibrarySize = new int(167);
 	string* keycodeElements;
-	string* keycodeCharacters;
 	string* secretCode;
 	bool* playerSelected;
 	bool* changeDifficulty;
@@ -67,6 +69,7 @@ private:
 	void displayTitleScreen();
 	void displayGameInfo();
 	int mainMenuChoice();
+	void displaySaveFiles();
 	void displayDifficultyInfo();
 	bool checkSaveFile();
 	void displayPlayerUI();
@@ -74,8 +77,10 @@ private:
 	void displayHelpInformation();
 	void displayRelevantDialogue(string hint, string guess);
 	string askForString(string prompt);
+	string getLineFromFile(string fileName, int lineNumber);
 	void newGame();
-	void loadGame();
+	void loadGame(int saveFile);
+	void runGame();
 	bool isGameOver();
 	void saveGame();
 	void saveProgress();

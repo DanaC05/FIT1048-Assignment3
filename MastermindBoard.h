@@ -17,6 +17,7 @@ public:
 	// accessor methods
 	void displayPlayerAttempts();
 	void displayBoard();
+	string validBoardSymbols();
 	string generateBoardString();
 	string generateAttemptsString();
 	string generateHintData();
@@ -24,7 +25,9 @@ public:
 
 	// mutator methods
 	void addTurn(string guess, string hint);
-	void mastermindSetup();
+	void boardSetup();
+	void loadHints(string hints);
+	void loadGuesses(string guesses);
 
 protected:
 	// variables

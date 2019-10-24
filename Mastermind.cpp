@@ -24,7 +24,7 @@ Mastermind::~Mastermind() {
 	delete enterFileName;
 	delete selectFileName;
 	delete wouldFileName;
-	delete saveFileDirectory;
+	delete saveFileName;
 	delete loadGameSelected;
 	delete gameWon;
 	delete keycodeElements;
@@ -32,13 +32,12 @@ Mastermind::~Mastermind() {
 	delete playerSelected;
 	delete changeDifficulty;
 	delete saveProgressSelected;
-	delete keycodeCharacters;
 }
 
 //=======================================================================================
 //                              PUBLIC: ACCESSOR METHODS
 //=======================================================================================
-void Mastermind::runGame() {
+void Mastermind::startGame() {
 	// clear screen
 	system("cls");
 
@@ -48,7 +47,7 @@ void Mastermind::runGame() {
 	// display loading screen
 	displayLoadingScreen();
 
-	// display main menu and start game (based on player choice)////////////////TODO: add choice to ave game (allows to save progress without having to be in game)
+	// display main menu and start game (based on player choice)////////////////TODO: add choice to save game (allows to save progress without having to be in game)
 	int number = mainMenuChoice();
 
 	///////////////////////////////////////////////////////////////// TODO: add method to play one game - condition for load game as well
@@ -172,7 +171,7 @@ void Mastermind::displayDifficultyInfo() {
 }
 
 bool Mastermind::checkSaveFile() {
-	ifstream saveTextFile(*saveFileDirectory + "mastermindSaveFiles.txt");
+	ifstream saveTextFile(*saveFileName);
 
 	// if save file exits
 	if (saveTextFile) {
@@ -190,7 +189,7 @@ void Mastermind::displayPlayerUI() {
 
 bool Mastermind::checkAttemptValidity(string guess) {
 	for (int i = 0; i < guess.size(); i++) {
-		if (keycodeCharacters->find(guess[i]) == string::npos) {
+		if (gameBoard->validBoardSymbols().find(guess[i]) == string::npos) {
 			return false;
 		}
 	}
@@ -244,7 +243,7 @@ void Mastermind::displayRelevantDialogue(string hint, string guess) {
 		gameBoard->displayBoard();
 
 		// display player dialogue
-		cout << "\t\t\t" << playerDialogue << endl;
+		cout << "\t\t\t" << playerDialogue << "\n\n\n\n\n\n\n\n\n\n\n" << endl;
 
 		// wait for player to continue
 		system("pause");
@@ -263,6 +262,92 @@ string Mastermind::askForString(string prompt) {
 	}
 
 	return userInput;
+}
+
+string Mastermind::getLineFromFile(string fileName, int lineNumber) {
+	ifstream file(fileName);
+	string fileData;
+	int currentLine = 0;
+
+	while (getline(file, fileData)) {
+		if (currentLine == lineNumber) {
+			return fileData;
+		}
+		currentLine += 1;
+	}
+	
+	throw out_of_range("lineNumber is greater than the length of this file.");
+}
+
+void Mastermind::newGame() {
+	// setup game components (player, difficulty, board and secret code)
+	setGameAttribtutes();
+
+	// run game with about attributes
+	runGame();
+}
+
+void Mastermind::loadGame(int saveFile) {
+	ifstream savesTextFile(*saveFileName);
+	string saveData;
+	bool allDataLoaded = false;
+	int lineStart = saveFile * 10;
+	int currentLine = 0;
+	int saveLine = 1;
+
+	while (getline(savesTextFile, saveData) && !allDataLoaded) {
+		if (currentLine >= lineStart + 1) {
+			switch (saveLine) {
+			case 1:
+				if (saveData == "Ellie") {
+					player = new Ellie();
+				}
+				else {
+					player = new CustomPlayer(saveData);
+				}
+				break;
+			case 2:
+				for (int i = 0; i <= stoi(saveData); i++) {
+					player->addGameWon();
+				}
+				break;
+			case 3:
+				for (int j = 0; j <= stoi(saveData); j++) {
+					player->addGameLossed();
+				}
+				break;
+			case 4:
+				player->setPlayerLevel(stoi(saveData));
+				break;
+			case 5:
+				if (saveData == ".") {
+					allDataLoaded = true;
+				}
+				else {
+					setBoard(stoi(saveData));
+				}
+				break;
+			case 6:
+				gameBoard->loadGuesses(saveData);
+				break;
+			case 7:
+				gameBoard->loadHints(saveData);
+				break;
+			case 8:
+				*secretCode = saveData;
+				break;
+			case 9:
+				for (int k = 0; k <= stoi(saveData); k++) {
+					gameBoard->addAttempt();
+				}
+				break;
+			}
+		}
+
+		currentLine += 1;
+	}
+
+	runGame();
 }
 
 bool Mastermind::isGameOver() {
@@ -399,24 +484,18 @@ void Mastermind::setDifficulty() {
 }
 
 void Mastermind::generateSecretCode() {
-	switch (*currentGameDifficulty) {
-	case 1:
-		keycodeCharacters = new string("012345");
-		break;
-	case 2:
-		keycodeCharacters = new string("!@#$%^&*?");
-		break;
-	case 3:
-	case 4:
-		keycodeCharacters = new string("abcdefghijklmnopqrstuvwxyz");
-		break;
-	}
-
 	int codeIndex;
 	string generatedCode = "";
-	for (int i = 0; i < 4; i++) {
-		codeIndex = rand() % keycodeCharacters->size();
-		generatedCode += keycodeCharacters[codeIndex];
+
+	if (*currentGameDifficulty != 3) {
+		for (int i = 0; i < 4; i++) {
+			codeIndex = rand() % gameBoard->validBoardSymbols().size();
+			generatedCode += gameBoard->validBoardSymbols()[codeIndex];
+		}
+	}
+	else {
+		codeIndex = rand() % *wordLibrarySize;
+		generatedCode = getLineFromFile(*wordLibraryName, codeIndex);
 	}
 
 	secretCode = new string(generatedCode);
@@ -512,6 +591,9 @@ string Mastermind::generateSaveData() {
 	saveData += to_string(player->gamesLossed()) + "\n";
 	saveData += to_string(player->level()) + "\n";
 
+	// add board type info (difficulty determines board type)
+	saveData += to_string(*currentGameDifficulty) + "\n";
+
 	if (*saveProgressSelected) {
 		for (int i = 0; i < 5; i++) {
 			if (i == 4) {
@@ -534,7 +616,6 @@ string Mastermind::generateSaveData() {
 
 		// add game attributes
 		saveData += *secretCode + "\n";
-		saveData += to_string(*currentGameDifficulty) + "\n";
 		saveData += to_string(gameBoard->getNumAttempts());
 	}
 	return saveData;
@@ -544,11 +625,13 @@ void Mastermind::saveGame() {
 	ofstream gameSaveFile;
 	string dataToWrite;
 
+	/////////////////////////////////////////////////////////////// TODO: get save file name from player or set default
+
 	// add all other necessary game data
 	dataToWrite += generateSaveData();
 
 	// open mastermindSaveFile.txt
-	gameSaveFile.open(*saveFileDirectory + "mastermindSaveFile.txt", ios::app);
+	gameSaveFile.open(*saveFileName, ios::app);
 
 	// save game data
 	gameSaveFile << dataToWrite;

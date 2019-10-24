@@ -9,5 +9,5 @@ Normal::Normal() {
 	attemptsFileName = new string("previousAttempts/normalAttempts.txt");
 	validSymbols = new string("numbers 0-5");
 	symbolGroup = new string("number");
-	MastermindBoard::mastermindSetup();
+	boardSetup();
 }
