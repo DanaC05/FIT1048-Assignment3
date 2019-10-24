@@ -36,7 +36,7 @@ public:
 private:
 	// variables
 	Player* player;
-	Board* gameBoard;
+	MastermindBoard* gameBoard;
 	const string* uiFileName = new string("gameUI/playerUI.txt");
 	const string* loadingFileName = new string("screens/TLOUFireflies.txt");
 	const string* titleFileName = new string("screens/TLOUTitle.txt");
@@ -48,10 +48,12 @@ private:
 	const string* wouldFileName = new string("text/wouldYouLikeTo.txt");
 	const string* saveFileDirectory = new string("saveFiles");
 	string* keycodeElements;
+	string* keycodeCharacters;
 	string* secretCode;
 	bool* playerSelected;
 	bool* changeDifficulty;
 	bool* loadGameSelected;
+	bool* saveProgressSelected;
 	bool* gameWon;
 	enum {
 		KEY_ENTER = 13,
@@ -61,7 +63,6 @@ private:
 	int* currentGameDifficulty;
 
 	// accessor methods
-	bool isGameOver();
 	void displayLoadingScreen();
 	void displayTitleScreen();
 	void displayGameInfo();
@@ -69,8 +70,14 @@ private:
 	void displayDifficultyInfo();
 	bool checkSaveFile();
 	void displayPlayerUI();
+	bool checkAttemptValidity(string guess);
+	void displayHelpInformation();
+	void displayPlayerFeedback(string feedback);
 	void newGame();
 	void loadGame();
+	bool isGameOver();
+	void saveGame();
+	void saveProgress();
 	void returnToMenu();
 	void gameOver();
 	void quitGame();
@@ -82,10 +89,8 @@ private:
 	void setBoard(int difficulty);
 	void generateSecretCode();
 	void playTurn();
-
-	void executePlayerTurn();
-	
-	void generateHint();
+	string generateHint(string guess);
+	void executePlayerTurn(string playerChoice);
 	string generateSaveData();
 	int windowsSelect(vector<string> optionVector, int numOptions, string fileName, string optionsIndent = "");
 	void printTextFile(string fileName, int delay = 0, string indent = "");

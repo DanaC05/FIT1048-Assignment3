@@ -18,6 +18,8 @@ public:
 	void displayPlayerAttempts();
 	string generateBoardString();
 	string generateAttemptsString();
+	string generateHintData();
+	string generateAttemptData();
 
 	// mutator methods
 	void addTurn(string guess, string hint);

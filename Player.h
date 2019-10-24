@@ -28,6 +28,7 @@ public:
 	int gamesLossed();
 	int level();
 	bool playerPromoted();
+	void setPlayerLevel(int level);
 
 protected:
 	// variables
@@ -36,6 +37,7 @@ protected:
 	int* playerScore;
 	int* playerLevel;
 	string* playerName;
+	bool* promotion;
 
 	// mutator methods
 	void setPlayerVariables();

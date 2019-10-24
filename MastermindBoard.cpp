@@ -42,8 +42,8 @@ void MastermindBoard::displayPlayerAttempts() {
 //=======================================================================================
 void MastermindBoard::addTurn(string guess, string hint) {
 	addAttempt();
-	playerAttempts[int(numAttempts - 1)] = guess;
-	playerHints[int(numAttempts - 1)] = hint;
+	playerAttempts[int(*numAttempts - 1)] = guess;
+	playerHints[int(*numAttempts - 1)] = hint;
 }
 
 //=======================================================================================
@@ -71,7 +71,7 @@ string MastermindBoard::generateBoardString() {
 			if (currentLine == 8) {
 				int numCharacters = 13;
 
-				if (playerHints[int(numAttempts - 1)] == "won") {
+				if (playerHints[int(*numAttempts - 1)] == "won") {
 					dataToAdd = "ACCESS GRANTED";
 					numCharacters = 14;
 				}
@@ -83,7 +83,7 @@ string MastermindBoard::generateBoardString() {
 				boardString += lineToAdd + "\n";
 			}
 			else if (currentLine == 9) {
-				dataToAdd = playerHints[int(numAttempts - 1)];
+				dataToAdd = playerHints[int(*numAttempts - 1)];
 
 				if (dataToAdd == "won") {
 					dataToAdd = "    ";
@@ -94,8 +94,8 @@ string MastermindBoard::generateBoardString() {
 			}
 			else if (currentLine == 13) {
 				for (int i = 0; i < 4; i++) {
-					char guessElement = playerAttempts[int(numAttempts - 1)][i];
-					lineToAdd.replace((i + 1) * 10, 1, string(1, guessElement));
+					char guessElement = playerAttempts[int(*numAttempts - 1)][i];
+					lineToAdd.replace((i + 1)*10, 1, string(1, guessElement));
 				}
 
 				boardString += lineToAdd + "\n";
@@ -153,6 +153,14 @@ string MastermindBoard::generateAttemptsString() {
 
 	attemptsTextFile.close();
 	return playerAttemptsString;
+}
+
+string MastermindBoard::generateHintData() {
+	return "";
+}
+
+string MastermindBoard::generateAttemptData() {
+	return "";
 }
 
 //=======================================================================================
