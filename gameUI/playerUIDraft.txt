@@ -1,0 +1,9 @@
+.~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+|                            |
+|   Enter safe combination   |
+|   See previous attempts    |
+|   Save Game                |
+|   Help                     |
+|   Quit                     |
+|                            |
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~'

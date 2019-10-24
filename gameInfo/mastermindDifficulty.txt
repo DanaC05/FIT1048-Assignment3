@@ -1,0 +1,34 @@
+.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+
+|  								       |
+
+|   Normal:   For casual players. Keycode strength is moderate         |
+|             and can contain only numbers 0-5. Bandits patrol         |
+|             moderately. 10 attempts are given.                       |
+
+|                                                                      |
+
+|                                                                      |
+
+|   Hard:     For experienced players. Keycode is hard and can         |
+|             contain the symbols: ! @ # $ % ^ & * ?. Bandits patrol   |
+|             slightly less. 12 attempts are given.                    |
+|                                                                      |
+
+|								       |
+
+|   Survivor: For players that want a considerable challenge.          |	   
+
+|    	      Keycode is very hard and can contain only letters a-z    |
+|             to make a 4 letter word. Bandits patrol rarely.          | 
+|             14 attempts are given.		         	       |
+
+|						                       |
+
+|	                                                               |
+
+|   Grounded: For the toughest of the hardcore. Keycode is extremely   |
+|             difficult and can contain the letters a-z. Bandits       |
+|             patrol sporadically. 16 attempts are given.              |          
+|								       |
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'

@@ -1,0 +1,40 @@
+.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+|                                                                      |
+|   You are in the midst of the end of the world. An outbreak of a     |
+|   mutated fungus has spread, causing anyone who comes into contact   |
+|   with it to transform into what is now known as 'the infected'.     |
+|                                                                      |
+|                                                                      |
+|   You are miraculously immune and need to find your way to the       |
+|   medical experts part of the rebel group that call themselves the   |
+|   'Fireflies' so a possible vaccine can be developed. You have been  |
+|   travelling with another survivor named Joel, who has been tasked   |
+|   with escorting you to the Fireflies medical facility.              |
+|                                                                      |
+|                                                                      |
+|   Joel has been critically injured after you were both ambushed      |
+|   trying to find the Fireflies at the university of Eastern          |
+|   Colorado. You managed to escape with Joel, finding shelter in an   |
+|   abandoned house.                                                   |
+|                                                                      |
+|                                                                      |
+|   Without any medical supplies, Joel is certain to succumb to his    |
+|   injuries. You know of a nearby bandit commune that is bound to     |
+|   have what he needs. You have scouted the hideout and found that    |
+|   the medical supplies are kept in the office with a keypad lock     |
+|   on the second floor of their main building.                        |
+|                                                                      |
+|                                                                      |
+|   The only problem: you dont know the combination.                   |
+|                                                                      |
+|                                                                      |
+|   You know you will only have a small window to crack the code and   |
+|   obtain the antibiotics Joel desperately needs. You've studied the  |
+|   patrol routine and have estimated that you will only have a        |
+|   certain number of attempts at the keycode before guards will       |
+|   check the office.                                                  |
+|                                                                      |
+|                                                                      |
+|   Will you be able to get the supplies and save Joel's life?         |
+|                                                                      |
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'

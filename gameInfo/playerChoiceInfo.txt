@@ -1,0 +1,16 @@
+.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+|                                                                      |
+|   Welcome to Mastermind: The Last Of Us Edition.                     |
+|                                                                      |
+|   In order for you to have the best and most immersive exerience,    | 
+|   when given the choice of who to play the game as, it is            |
+|   recommended that you choose Ellie.                                 |
+|                                                                      |
+|   However, if you prefer to save Joel as yourself, you will also     |
+|   have that option. Although, it should be noted that character      |
+|   responses are not as varied or colorful.                           |
+|                                                                      |
+|   Please note: if you change your mind you will have to start a      |
+|   a new game, so choose wisely!                                      |
+|                                                                      |
+'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
