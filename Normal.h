@@ -9,6 +9,9 @@ class Normal :
 public:
 	//constructor
 	Normal();
+
+	// mutator method
+	void resetBoard();
 };
 
 #endif // !NORMAL_H

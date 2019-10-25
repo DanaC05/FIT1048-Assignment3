@@ -11,3 +11,14 @@ Normal::Normal() {
 	symbolGroup = new string("number");
 	boardSetup();
 }
+
+//=======================================================================================
+//                                 PUBLIC: MUTATOR METHOD
+//=======================================================================================
+void Normal::resetBoard() {
+	numAttempts = 0;
+	fill_n(playerAttempts, *maxAttempts, "");
+	fill_n(playerHints, *maxAttempts, "");
+}
+
+

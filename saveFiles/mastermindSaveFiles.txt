@@ -1,0 +1,18 @@
+SAVE FILE 1
+Ellie
+4
+2
+1
+1234
+o?? 
+1345
+9
+SAVE FILE 2
+Dana
+1
+0
+2
+?#$@
+oo? 
+?#@!
+7

@@ -12,6 +12,8 @@ Mastermind::Mastermind() {
 	playerSelected = new bool(false);
 	changeDifficulty = new bool(true);
 	gameWon = new bool(false);
+	gameRunning = new bool(true);
+	playerQuitGame = new bool(false);
 	saveProgressSelected = new bool(false);
 }
 
@@ -32,6 +34,10 @@ Mastermind::~Mastermind() {
 	delete playerSelected;
 	delete changeDifficulty;
 	delete saveProgressSelected;
+	delete continueFileName;
+	delete loadFileName;
+	delete gameRunning;
+	delete playerQuitGame;
 }
 
 //=======================================================================================
@@ -47,24 +53,14 @@ void Mastermind::startGame() {
 	// display loading screen
 	displayLoadingScreen();
 
-	// display main menu and start game (based on player choice)////////////////TODO: add choice to save game (allows to save progress without having to be in game)
-	int number = mainMenuChoice();
-
-	///////////////////////////////////////////////////////////////// TODO: add method to play one game - condition for load game as well
-	/// start game (based on menu choice
+	// display main menu 
+	mainMenu();
 }
 
 void Mastermind::testDisplay() {
 	
+
 }
-
-
-//=======================================================================================
-//                                   PLACEMENT TBA
-//=======================================================================================
-
-
-
 
 //=======================================================================================
 //                              PRIVATE: ACCESSOR METHODS
@@ -158,6 +154,51 @@ int Mastermind::mainMenuChoice() {
 
 	playerChoice = windowsSelect(gameStart, numOptions, *titleFileName, "\t ");
 	return playerChoice;
+}
+
+void Mastermind::displaySaveFiles() {
+	vector<string> saveFileOptions;
+	ifstream saveFile(*saveFileName);
+	string saveFileData;
+	int saveFileLine = 0;
+	int saveFileCount = 1;
+	string playerDetails;
+	int loadChoice;
+
+	while (getline(saveFile, saveFileData)) {
+		if (saveFileLine == 9) {
+			saveFileLine = 0;
+			saveFileCount += 1;
+		}
+		switch (saveFileLine) {
+		// get save file name
+		case 0:
+			saveFileOptions.push_back(saveFileData);
+			break;
+		// get player name
+		case 1:
+			playerDetails = saveFileData;
+			break;
+		// get player level
+		case 4:
+			playerDetails += "\t\tLevel: " + saveFileData;
+			saveFileOptions.push_back(playerDetails);
+		}
+		saveFileLine += 1;
+	}
+
+	saveFileOptions.push_back("\t\t\tBack");
+	saveFileOptions.push_back("");
+	saveFileCount += 1;
+	
+	loadChoice = windowsSelect(saveFileOptions, saveFileCount*2, *loadFileName, "", true);
+
+	if (loadChoice == (saveFileCount * 2) - 2) {
+		mainMenu();
+	}
+	else {
+		loadGame(loadChoice);
+	}
 }
 
 void Mastermind::displayDifficultyInfo() {
@@ -267,16 +308,45 @@ string Mastermind::askForString(string prompt) {
 string Mastermind::getLineFromFile(string fileName, int lineNumber) {
 	ifstream file(fileName);
 	string fileData;
+	int fileLines = getLineCount(fileName);
 	int currentLine = 0;
 
-	while (getline(file, fileData)) {
-		if (currentLine == lineNumber) {
-			return fileData;
+	if (lineNumber < fileLines) {
+		while (getline(file, fileData)) {
+			if (currentLine == lineNumber) {
+				file.close();
+				return fileData;
+			}
+			currentLine += 1;
 		}
-		currentLine += 1;
+	}
+	else {
+		file.close();
+		throw out_of_range("lineNumber is greater than the length of this file.");
+	}
+
+	return "";
+}
+
+int Mastermind::getLineCount(string fileName) {
+	ifstream file(fileName);
+	string fileData;
+	int lineCount = 0;
+
+	while (getline(file, fileData)) {
+		lineCount += 1;
 	}
 	
-	throw out_of_range("lineNumber is greater than the length of this file.");
+	file.close();
+	return lineCount;
+}
+
+string Mastermind::getCurrentDate() {
+	tm timeStruct;
+	time_t currentTime = time(0);
+	localtime_s(&timeStruct, &currentTime);
+	string currentDate = to_string((timeStruct.tm_mday)) + "-" + to_string((timeStruct.tm_mon + 1)) + "-" + to_string((timeStruct.tm_year + 1900));
+	return currentDate;
 }
 
 void Mastermind::newGame() {
@@ -287,11 +357,38 @@ void Mastermind::newGame() {
 	runGame();
 }
 
+void Mastermind::runGame() {
+	bool gameRunning = true;
+
+	while (gameRunning) {
+		// play turn
+		playTurn();
+
+		// check for game over
+		gameRunning = isGameOver();
+	}
+
+	if (gameWon) {
+		// show game won ending
+		//gameWonEnding();
+	}
+	else if (gameBoard->maxAttemptsReached()) {
+		// show game lossed ending
+		//gameOver();
+	}
+	else {
+		// player has selected to quit, return to main menu
+		mainMenu();
+	}
+}
+
 void Mastermind::loadGame(int saveFile) {
 	ifstream savesTextFile(*saveFileName);
 	string saveData;
+	vector<string> loadOptions;
 	bool allDataLoaded = false;
-	int lineStart = saveFile * 10;
+	bool progressSaveFile = false;
+	int lineStart = saveFile * 8;
 	int currentLine = 0;
 	int saveLine = 1;
 
@@ -317,15 +414,18 @@ void Mastermind::loadGame(int saveFile) {
 				}
 				break;
 			case 4:
-				player->setPlayerLevel(stoi(saveData));
-				break;
-			case 5:
-				if (saveData == ".") {
+				if (saveData[0] == '.') {
 					allDataLoaded = true;
+					progressSaveFile = true;
+
 				}
 				else {
 					setBoard(stoi(saveData));
+					player->setPlayerLevel(stoi(saveData));
 				}
+				*currentGameDifficulty = stoi(saveData);
+				
+
 				break;
 			case 6:
 				gameBoard->loadGuesses(saveData);
@@ -340,11 +440,28 @@ void Mastermind::loadGame(int saveFile) {
 				for (int k = 0; k <= stoi(saveData); k++) {
 					gameBoard->addAttempt();
 				}
+				allDataLoaded = true;
 				break;
 			}
 		}
 
 		currentLine += 1;
+	}
+
+	if (progressSaveFile) {
+		loadOptions.push_back("Continue");
+		loadOptions.push_back("Change Difficulty (this will also reset your level)");
+
+		int playerChoice = windowsSelect(loadOptions, 2, *continueFileName, "      ");
+
+		if (playerChoice == 2) {
+			*changeDifficulty = true;
+			*playerSelected = true;
+			setGameAttribtutes();
+		}
+		else {
+			setBoard(*currentGameDifficulty);
+		}
 	}
 
 	runGame();
@@ -360,13 +477,13 @@ bool Mastermind::isGameOver() {
 //=======================================================================================
 void Mastermind::setGameAttribtutes() {
 	// set player (if not set already)
-	if (!playerSelected) {
+	if (!*playerSelected) {
 		setPlayer();
 	}
 
 	// set difficulty (if not set already)
 	/////////////////////////////////////////////////////////////// TODO: rewrite game difficultyInfo.txt - encoding is broken
-	if (changeDifficulty) {
+	if (*changeDifficulty) {
 		setDifficulty();
 	}
 
@@ -381,7 +498,7 @@ void Mastermind::setPlayer() {
 
 	system("cls");
 
-	if (!loadGameSelected) {
+	if (!*loadGameSelected) {
 		string playerName;
 		int playerChoice;
 		vector<string> nameOptions;
@@ -400,8 +517,9 @@ void Mastermind::setPlayer() {
 			// print screen title
 			printTextFile("text/enterYourName.txt");
 
-			///////////////////////////////////////////////////////////////////////// TODO: ask player for name
-			//playerName = player.askForString("\n\n\n\n\t\t\t\t\t\t\tName: ");
+			///////////////////////////////////////////////////////////////////////////////////////////////////// TODO: set character limit on name
+			// ask player for name
+			playerName = askForString("\n\n\n\n\t\t\t\t\t\t\tName: ");
 
 			// give feedback
 			cout << "\n\n\n\n\t\t\t\t\t     Your name has been set to: " << playerName << "\n\n\n\n\n\n" << endl;
@@ -507,6 +625,9 @@ void  Mastermind::playTurn() {
 	// display board
 	gameBoard->displayBoard();
 
+	// display dialogue about symbols (this will only occur once on the first play)
+	cout << player->getDialogue(4) << endl;
+
 	// display player choices
 	displayPlayerUI();
 
@@ -525,18 +646,25 @@ string Mastermind::generateHint(string guess) {
 			if (secretCode[i] == to_string(guess[i])) {
 				rightPlace += "o";
 			}
-			else {
+			else if(secretCode->find(guess[i]) != string::npos) {
 				rightCharacter += "?";
 			}
 		}
 	}
 
-	hint = rightPlace + rightCharacter;
+	// if all charaters are correct and in the right position
+	if (rightPlace == "oooo") {
+		*gameWon = true;
+		hint = "won";
+	}
+	else {
+		hint = rightPlace + rightCharacter;
 
-	// pad hint to make sure length is 4
-	if (hint.length() < 4) {
-		for (int j = 0; j <= 4 - hint.length(); j++) {
-			hint += " ";
+		// pad hint to make sure length is 4
+		if (hint.length() < 4) {
+			for (int j = 0; j <= 4 - hint.length(); j++) {
+				hint += " ";
+			}
 		}
 	}
 
@@ -551,18 +679,31 @@ void Mastermind::executePlayerTurn(string playerChoice) {
 	}
 
 	if (playerChoice == "S" || playerChoice == "s") {
-		///////////////////////////////////////////////////////// TODO: output player dialogue (add to ellie pulling out torn paper)
+		if (gameBoard->getNumAttempts() == 0) {
+			cout << player->getDialogue(2) << endl;
+		}
 		gameBoard->displayPlayerAttempts();
 		
 	}
 	else if (playerChoice == "SA" || playerChoice == "sa" || playerChoice == "Sa" || playerChoice == "sA") {
+		// save current game data
 		saveGame();
-		//displayPlayerFeedback("Game saved successfully!");
+
+		// clear screen
+		system("cls");
+
+		// give feedback
+		cout << "\n\n\n\n\n\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\\t\t\t\t\t\t Game saved successfully!" << endl;
+		cout << "\n\n\n\n\n\n\n\n" << endl;
+
+		// wait for player to continue
+		system("pause");
 	}
 	else if (playerChoice == "H" || playerChoice == "h") {
 		//displayHelpInformation();
 	}
 	else if (playerChoice == "M" || playerChoice == "m") {
+		/////////////////////////////////////////////////////////////////////////////////////// TODO: get player confirmation to quit first
 		//quitGame();
 	}
 	else if (checkAttemptValidity(playerChoice)) {
@@ -581,22 +722,53 @@ void Mastermind::executePlayerTurn(string playerChoice) {
 }
 
 string Mastermind::generateSaveData() {
-	string saveData;
+	///////////////////////////////////////////////////////// TODO: format name        level: 
+	string saveData = "";
+	string playerSaveName = "";
+	string errorMessage = "";
+	bool invalidNameSelected = true;
 
-	//////////////////////////////////////////////////////TODO - get save file name (default is Save File 1 + (date - dd/mm/yyyy))
+	while (invalidNameSelected) {
+		system("cls");
+
+		printTextFile(*saveGameFileName);
+
+		playerSaveName = askForString("\n\n\t\t\t\t\t     Save File Name: ");
+
+		if (playerSaveName.size() > 15) {
+			cout << "\n\n\n\n\n\n\n\t\t\tSave file name is too long! Please enter a name of less than 15 characters.\n\n\n\n\n\n" << endl;
+			system("pause");
+		}
+		else {
+			invalidNameSelected = false;
+		}
+	}
+
+	if (playerSaveName == " ") {
+		int numSaveFiles = getLineCount(*saveFileName) / 8;
+		playerSaveName = "SAVE FILE " + to_string(numSaveFiles + 1);
+	}
+
+	int nameLength = playerSaveName.size();
+	int spacingNumber = 19 - nameLength;
+	saveData += playerSaveName;
+
+	string spacing(spacingNumber, ' ');
+
+	saveData += spacing + getCurrentDate();
 
 	// add player attributes
-	saveData = player->name() + "\n";
+	saveData += player->name() + "\n";
 	saveData += to_string(player->gamesWon()) + "\n";
 	saveData += to_string(player->gamesLossed()) + "\n";
 	saveData += to_string(player->level()) + "\n";
 
-	// add board type info (difficulty determines board type)
-	saveData += to_string(*currentGameDifficulty) + "\n";
-
 	if (*saveProgressSelected) {
-		for (int i = 0; i < 5; i++) {
-			if (i == 4) {
+		// add board type info (difficulty determines board type)
+		saveData += to_string(*currentGameDifficulty) + ".\n";
+
+		for (int i = 0; i < 4; i++) {
+			if (i == 3) {
 				saveData += ".";
 			}
 			else {
@@ -605,6 +777,9 @@ string Mastermind::generateSaveData() {
 		}
 	}
 	else {
+		// add board type info (difficulty determines board type)
+		saveData += to_string(*currentGameDifficulty) + "\n";
+
 		// add player guesses
 		saveData += gameBoard->generateAttemptData();
 
@@ -624,9 +799,7 @@ string Mastermind::generateSaveData() {
 void Mastermind::saveGame() {
 	ofstream gameSaveFile;
 	string dataToWrite;
-
-	/////////////////////////////////////////////////////////////// TODO: get save file name from player or set default
-
+	
 	// add all other necessary game data
 	dataToWrite += generateSaveData();
 
@@ -646,7 +819,21 @@ void Mastermind::saveProgress() {
 	*saveProgressSelected = false;
 }
 
-int Mastermind::windowsSelect(vector<string> optionArray, int numOptions, string fileName, string optionsIndent) {
+void Mastermind::mainMenu() {
+	int menuChoice = mainMenuChoice();
+
+	switch (menuChoice) {
+	case 1:
+		newGame();
+		break;
+	case 2:
+		if (checkSaveFile()) {
+			displaySaveFiles();
+		}
+	}
+}
+
+int Mastermind::windowsSelect(vector<string> optionArray, int numOptions, string fileName, string optionsIndent, bool extraItemToPrint) {
 	bool optionSelected = false;
 	int optionIndex = 0;
 
@@ -659,7 +846,13 @@ int Mastermind::windowsSelect(vector<string> optionArray, int numOptions, string
 		}
 
 		// print options
-		printVector(optionArray, numOptions, optionIndex, "> ", optionsIndent);
+		if (extraItemToPrint) {
+			printVector(optionArray, numOptions, optionIndex, "> ", optionsIndent, true);
+
+		}
+		else {
+			printVector(optionArray, numOptions, optionIndex, "> ", optionsIndent);
+		}
 
 		// get keyboard press
 		char key = _getch();
@@ -671,16 +864,34 @@ int Mastermind::windowsSelect(vector<string> optionArray, int numOptions, string
 			case KEY_UP:
 				// move selection up
 				if (optionIndex != 0) {
-					optionIndex -= 1;
+					if (extraItemToPrint) {
+						optionIndex -= 2;
+					}
+					else {
+						optionIndex -= 1;
+					}
 				}
 				// move selection to bottom
 				else {
-					optionIndex = numOptions - 1;
+					if (extraItemToPrint) {
+						optionIndex = numOptions - 2;
+					}
+					else {
+						optionIndex = numOptions - 1;
+					}
 				}
 				break;
 			case KEY_DOWN:
 				// move selection down
-				if (optionIndex != numOptions - 1) {
+				if (extraItemToPrint) {
+					if (optionIndex != numOptions - 2) {
+						optionIndex += 2;
+					}
+					else {
+						optionIndex = 0;
+					}
+				}
+				else if (optionIndex != numOptions - 1) {
 					optionIndex += 1;
 				}
 				//move selection to top
@@ -693,8 +904,6 @@ int Mastermind::windowsSelect(vector<string> optionArray, int numOptions, string
 		// selection is made
 		else if (key == KEY_ENTER) {
 			optionSelected = true;
-			printTextFile(fileName);
-			printVector(optionArray, numOptions, optionIndex, "> ", optionsIndent);
 		}
 	}
 
@@ -717,18 +926,30 @@ void Mastermind::printTextFile(string fileName, int delay, string indent) {
 	textFile.close();
 }
 
-void Mastermind::printVector(vector<string> vectorToPrint, int numItems, int insertIndex, string insertElement, string elementIndent) {
-	// if extra element given at non defaul (-1) index
+void Mastermind::printVector(vector<string> vectorToPrint, int numItems, int insertIndex, string insertElement, string elementIndent, bool extraItemToPrint) {
+	int incrementAdjustment = 1;
+	int stopIndex = numItems;
+	if (extraItemToPrint) {
+		incrementAdjustment = 2;
+		stopIndex = numItems - 1;
+	}
+	// if extra element given at non defauly (-1) index
 	if (insertIndex != -1) {
-		for (int i = 0; i < numItems; i++) {
+		for (int i = 0; i < stopIndex; i += incrementAdjustment) {
 			// add insert element at given index
 			if (i == insertIndex) {
 				// add brackets to highlight element
 				cout << "\t\t\t\t\t\t" << elementIndent << insertElement << "[" << vectorToPrint[i] << "]\n" << endl;
+				if (extraItemToPrint) {
+					cout << "\t\t\t\t\t\t" << elementIndent << "   " << vectorToPrint[i + 1] << "\n\n" << endl;
+				}
 			}
 			else {
 				// add whitespace to align vector elements
 				cout << "\t\t\t\t\t\t" << elementIndent << "   " << vectorToPrint[i] << "\n" << endl;
+				if (extraItemToPrint) {
+					cout << "\t\t\t\t\t\t" << elementIndent << "   " << vectorToPrint[i + 1] << "\n\n" << endl;
+				}
 			}
 		}
 	}
@@ -739,4 +960,3 @@ void Mastermind::printVector(vector<string> vectorToPrint, int numItems, int ins
 		}
 	}
 }
-

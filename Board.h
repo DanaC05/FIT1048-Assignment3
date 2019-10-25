@@ -13,7 +13,7 @@ public:
 
 	// abstract methods
 	virtual void displayBoard() = 0;
-	virtual void boardSetup();
+	virtual void boardSetup() = 0;
 	
 	// accessor methods
 	int getNumAttempts();

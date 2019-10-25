@@ -9,6 +9,9 @@ class Hard :
 public:
 	// constructor
 	Hard();
+
+	// mutator method
+	void resetBoard();
 };
 
 #endif // !HARD_H

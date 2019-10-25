@@ -41,7 +41,7 @@ protected:
 	bool* promotion;
 
 	// mutator methods
-	void setPlayerVariables();
+	virtual void setPlayerVariables();
 };
 
 #endif // !PLAYER_H

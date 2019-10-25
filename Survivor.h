@@ -9,6 +9,9 @@ class Survivor :
 public:
 	// constructor
 	Survivor();
+
+	// mutator methods
+	void resetBoard();
 };
 
 #endif // !SURVIVOR_H

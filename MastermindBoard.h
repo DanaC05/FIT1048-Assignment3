@@ -12,7 +12,7 @@ public:
     ~MastermindBoard();
 
 	// abstract methods 
-	//virtual void resetBoard() = 0;
+	virtual void resetBoard() = 0;
 
 	// accessor methods
 	void displayPlayerAttempts();
@@ -26,8 +26,8 @@ public:
 	// mutator methods
 	void addTurn(string guess, string hint);
 	void boardSetup();
-	void loadHints(string hints);
 	void loadGuesses(string guesses);
+	void loadHints(string hints);
 
 protected:
 	// variables

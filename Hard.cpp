@@ -11,3 +11,12 @@ Hard::Hard() {
 	symbolGroup = new string("symbol");
 	boardSetup();
 }
+
+//=======================================================================================
+//                                 PUBLIC: MUTATOR METHOD
+//=======================================================================================
+void Hard::resetBoard() {
+	numAttempts = 0;
+	fill_n(playerAttempts, *maxAttempts, "");
+	fill_n(playerHints, *maxAttempts, "");
+}

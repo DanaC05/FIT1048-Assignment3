@@ -11,3 +11,12 @@ Survivor::Survivor() {
 	symbolGroup = new string("letter");
 	boardSetup();
 }
+
+//=======================================================================================
+//                                 PUBLIC: MUTATOR METHOD
+//=======================================================================================
+void Survivor::resetBoard() {
+	numAttempts = 0;
+	fill_n(playerAttempts, *maxAttempts, "");
+	fill_n(playerHints, *maxAttempts, "");
+}

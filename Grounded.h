@@ -15,6 +15,9 @@ public:
 	string wordLibraryName();
 	int wordLibrarySize();
 
+	// mutator method
+	void resetBoard();
+
 private:
 	// variables
 	const string* libraryFileName = new string("wordLibraries/secretCodeLibrary.txt");

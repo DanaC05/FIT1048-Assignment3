@@ -8,10 +8,10 @@ Purpose: Driver Class File
 
 int main() {
 	// start game
-	//mastermind.runGame();
+	mastermind.startGame();
 
 	// test
-	mastermind.testDisplay();
+	//mastermind.testDisplay();
 
 	return 0;
 }

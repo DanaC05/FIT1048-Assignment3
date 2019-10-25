@@ -179,4 +179,36 @@ void MastermindBoard::boardSetup() {
 	playerHints = new string[int(*maxAttempts)];
 }
 
+void MastermindBoard::loadGuesses(string guesses) {
+	char guess = '.';
+
+	for (int i = 0; i < guesses.size(); i++) {
+		if (guesses[i] == ',' || guesses[i] == ' ') {
+			if (guess != '.') {
+				playerAttempts->push_back(guess);
+			}
+			guess = '.';
+		}
+		else {
+			guess += guesses[i];
+		}
+	}
+}
+
+void MastermindBoard::loadHints(string hints) {
+	char hint = '.';
+
+	for (int i = 0; i < hints.size(); i++) {
+		if (hints[i] == ',' || hints[i] == ' ') {
+			if (hint != '.') {
+				playerHints->push_back(hint);
+			}
+			hint = '.';
+		}
+		else {
+			hint += hints[i];
+		}
+	}
+}
+
 
