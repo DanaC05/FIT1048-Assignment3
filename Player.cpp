@@ -1,23 +1,36 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Player Class File
+
+This is an abstract class that acts as a generic
+template for it's subclasses (players).
+**************************************************/
 #include "Player.h"
 
 //=======================================================================================
 //                                 PUBLIC: CONSTRUCTORS
 //=======================================================================================
 Player::Player() {
-	setPlayerVariables();
+	playerName = new string("");
+	playerScore = new int(0);
+	playerLevel = new int(1);
+	numGamesWon = new int(0);
 }
 
 Player::Player(string name) {
 	playerName = new string(name);
-	setPlayerVariables();
+	playerScore = new int(0);
+	playerLevel = new int(1);
+	numGamesWon = new int(0);
 }
 
 Player::~Player() {
 	delete playerName;
 	delete playerScore;
+	delete playerLevel;
 	delete numGamesWon;
-	delete numGamesLossed;
-	delete promotion;
 }
 
 //=======================================================================================
@@ -31,26 +44,16 @@ void Player::addGameWon() {
 	*numGamesWon += 1;
 }
 
-void Player::addGameLossed() {
-	*numGamesLossed += 1;
-}
-
 void Player::resetGameStats() {
 	*numGamesWon = 0;
-	*numGamesLossed = 0;
 }
 
 void Player::resetScore() {
 	*playerScore = 0;
-	*promotion = false;
 }
 
 void Player::promotePlayer() {
-	if (*playerLevel < 5) {
-		*playerLevel += 1;
-		resetGameStats();
-		*promotion = true;
-	}
+	*playerLevel += 1;
 }
 
 void Player::setPlayerLevel(int level) {
@@ -72,25 +75,6 @@ int Player::gamesWon() {
 	return *numGamesWon;
 }
 
-int Player::gamesLossed() {
-	return *numGamesLossed;
-}
-
 int Player::level() {
 	return *playerLevel;
-}
-
-bool Player::playerPromoted() {
-	return *promotion;
-}
-
-//=======================================================================================
-//                               PRIVATE: MUTATOR METHODS
-//=======================================================================================
-void Player::setPlayerVariables() {
-	playerScore = new int(0);
-	playerLevel = new int(0);
-	numGamesWon = new int(0);
-	numGamesLossed = new int(0);
-	promotion = new bool(false);
 }

@@ -1,0 +1,42 @@
+			
+	
+
+										                                 ..--.
+						 		     .~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.'     '.
+                                                      		   .'|                                         |        '.
+                                                      		   |||      ============================       |         |		
+						      		   |||        THE CODE BREAKERS MANUAL         |         | 
+                                                      		   |||      ============================       |         |
+                                                      		   |||                                         |         |
+                                                      		   |||             { Chapter 6 }               |         |  
+						         	   |||                                         |         |
+                                                      		   |||                                         |         | 
+						      		   |||             KEYCODE LOCKS               |         |
+                                                      		   |||                                         |         |
+                                                      	    	   |||                                         |         |
+						      		   |||   Code breaking may seem like an        |         |
+						      		   |||   an impossible task but one must       |         |
+                                                      	 	   |||   simply know what to look for.         |         |
+                                                      		   |||                                         |         |
+                                                       		   |||   After entering a code, you may        |         |
+                                                      		   |||   notice some symbols appearing.        |         | 
+                                                      		   |||   These will either be question marks   |         |
+						      		   |||   '?' or circles 'o'.                   |         |
+						      		   |||                                         |         |
+						      		   |||   SYMBOL KEY:                           |         |
+						      		   |||	   ?: a character is found in the      |         |
+						      		   |||	      keycode, but is in the wrong     |         |
+						      		   |||	      place.                           |         |
+						      		   |||                                         |         |
+						      		   |||	   o: a character is found in the      |         |
+						      		   |||	      keycode and is in the            |         |
+						      		   |||	      correct place.                   |         |
+						      		   |||	                                       |         |
+						      		   |||   You'll find that keycodes usually     |         |
+						      		   |||   contain 4 characters.                 |         |
+						      		   |||                                         |         |
+						      		   |||	                                       |         |
+                                                      		   |.'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~| ....... |
+						      		   '~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.'-------'.
+						                   		       \.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+						

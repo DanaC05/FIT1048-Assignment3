@@ -1,0 +1,55 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+								.~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~.
+								|                                                                      |
+								|   You are trapped in your cell in a military outpost. There's a      |
+								|   keycode lock on the door but the soldiers guarding you have been   |
+							        |   patroling constantly.                                              |
+                                                                |                                                                      |
+                                                                |                                                                      |
+                                                                |   Finally you get you chance when they are called out on a raid.     |
+                                                                |                                                                      |
+                                                                |                                                                      |
+                                                                |   Can you break out before they return?                              |
+								|                                                                      |
+								'~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

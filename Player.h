@@ -1,3 +1,9 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Player Class Header
+**************************************************/
 #ifndef PLAYER_H
 #define PLAYER_H
 
@@ -17,15 +23,12 @@ public:
 	string name();
 	int score();
 	int gamesWon();
-	int gamesLossed();
 	int level();
-	bool playerPromoted();
 	virtual string getDialogue(int phraseID, string insertInfo = "") = 0;
 	
 	// mutator methods
 	void increaseScore(int points);
 	void addGameWon();
-	void addGameLossed();
 	void resetGameStats();
 	void resetScore();
 	void promotePlayer();
@@ -34,14 +37,9 @@ public:
 protected:
 	// variables
 	int* numGamesWon;
-	int* numGamesLossed;
 	int* playerScore;
 	int* playerLevel;
 	string* playerName;
-	bool* promotion;
-
-	// mutator methods
-	virtual void setPlayerVariables();
 };
 
 #endif // !PLAYER_H

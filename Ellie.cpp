@@ -1,3 +1,16 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Ellie Class File
+
+This class inherits from the Player class and
+allows the user to play as the character Ellie.
+It has all the basic functionallities of Player but
+also allows for the output of dialogue. This 
+dialogue is a lot more varied than that of 
+CustomPlayer.
+**************************************************/
 #include "Ellie.h"
 
 //=======================================================================================
@@ -11,122 +24,103 @@ Ellie::Ellie() {
 	srand(unsigned(time(NULL)));
 
 	// initialise variables
-	setPlayerVariables();
-	setEllieVariables();
+	firstZero = new bool(true);
+	firstExplanationGiven = new bool(false);
 }
 
 Ellie::~Ellie() {
 	delete firstZero;
 	delete firstExplanationGiven;
-	delete guardsLeft;
-	delete zeroOptions;
-	delete repeatOptions;
-	delete zeroSize;
-	delete repeatSize;
 }
 
 //=======================================================================================
-//                               PUBLIC: ACCESSOR METHODS
+//                               PUBLIC: ACCESSOR METHOD
 //=======================================================================================
 string Ellie::getDialogue(int phraseID, string insertInfo = "") {
+	// outputs dialogue depending on phraseID
 	string dialogueOutput = "";
 	switch (phraseID) {
+	// first phrase (to be displayed at the start of each game)
 	case 1:
-		if (*guardsLeft) {
-			dialogueOutput = "Okay, they're gone. I think I've got about " + insertInfo + " tries at this door until one of them comes back.\nLet's do this";
-			*guardsLeft = false;
-		}
-		else {
-			dialogueOutput = "";
-		}
-			break;
-	case 2:
-		dialogueOutput = "I should really start working on this door...";
+		dialogueOutput = "Okay, they're gone. I think I've got about " + insertInfo + " tries at this until one of them comes back.\n\n\n\n\n\n\n\n\n\t\t\t\t\t\t\t\t\t\t\tLet's do this.";
 		break;
+	// to be displayed when player selects 'show attempts' an no attempts have been made
+	case 2:
+		dialogueOutput = "I should really start working on this " + insertInfo + "...";
+		break;
+	// to be displayed when player gets 0 characters right
 	case 3:
 		int zeroIndex;
+
+		// to ensure only one of three phrases is used first (so it makes sense)
 		if (*firstZero) {
 			zeroIndex = rand() % 3;
-		}
-		else {
-			zeroIndex = rand() % 7;
 			*firstZero = false;
 		}
-		dialogueOutput = zeroOptions[zeroIndex];
+		// selects a random phrase from zeroPhrases
+		else {
+			zeroIndex = rand() % 7;
+			
+		}
+		dialogueOutput = zeroPhrases[zeroIndex];
 		break;
+	// to be displayed when the first hint of the game is given
 	case 4:
+		// ensures this phrase is only used once
 		if (!*firstExplanationGiven) {
-			dialogueOutput = "Hmm, it looks like the question marks mean I've got a " + insertInfo + " right but the wrong place... "
-				+ "\nand the circles mean I've got it in the right place! This should make things easier... "
-				+ "slightly.\n                             I better write this down.                                   ";
+			dialogueOutput = "\t\t\t\t\t\t   Hmm, it looks like the question marks mean I've got something right but in the wrong place... \n\t\t\t\t\t\tand the circles mean I've got it in the right place! This should make things easier... slightly.\n\t\t\t\t\t\t\t\t\t\t    I better write this down.";
 
 			*firstExplanationGiven = true;
 		}
-		else {
-			dialogueOutput = "";
-		}
 		break;
+	// to be displayed if the player enters a combination they've already tried before
 	case 5:
 		int repeatIndex;
-		repeatIndex = rand() % 3;
-		dialogueOutput = repeatOptions[repeatIndex];
-		break;
-	case 6:
-		dialogueOutput = "The code definitely doesn't have those, pretty sure I can only use " + insertInfo + ".";
-		break;
-	case 7:
-		dialogueOutput = "                    Alright! Just one more to go. I can do this.                      ";
-		break;
-	case 8:
-		dialogueOutput = "Crap! I can hear the guards downstairs. I better hurry, I think I can try two more times.";
-		break;
-	case 9:
-		dialogueOutput = "Crap! If I stay any longer they'll catch me. I better get back to Joel, I hope he's okay...";
-		break;
-	case 10:
-		dialogueOutput = "YES! Hell yeah! I did it! I actually did it! I better grab those antibiotics.";
-		break;
-	case 11:
-		dialogueOutput = "YES! Hell yeah access granted! \nAnd I think I have time to swipe some other supplies too!";
-	case 12:
-		dialogueOutput = "ACCESS GRANTED! Hell YES! There's even food in here! We'll be set for weeks!";
-	}
 
+		// selects a random phrase from repeatPhrases
+		repeatIndex = rand() % 3;
+		dialogueOutput = repeatPhrases[repeatIndex];
+		break;
+	// to be displayed in the event of an invalid entry
+	case 6:
+		dialogueOutput = "\t\t\t\t\t\t\t      The code definitely doesn't have those, pretty sure I can only use " + insertInfo + ".";
+		break;
+	// to be displayed when player has three characters correct and in the right position
+	case 7:
+		dialogueOutput = "\t\t\t\t\t\t\t\t\tAlright! Just one more to go. I can do this.";
+		break;
+	// to be displayed when player has two attempts left
+	case 8:
+		dialogueOutput = "\n\n\n\t\t\t\t\t\t\tCrap! I can hear " + insertInfo + ". I better hurry but I think I can try two more times.";
+		break;
+	// final phrase (to be displayed when the player looses the game)
+	case 9:
+		dialogueOutput = "\t\t\t\t\t\t\t\t\t\tWhat the-? Get the hell off me!\n\n\n";
+		break;
+	// final phrase (to be displayed if player guesses the code on their last attempt)
+	case 10:
+		dialogueOutput = "\t\t\t\t\t\tYES! Hell yeah! I did it! I actually did it! I better " + insertInfo;
+		break;
+	// final phrase (to be displayed if player guesses the code on their second last attempt)
+	case 11:
+		dialogueOutput = "\t\t\t\t\t\tYES! Hell yeah access granted! There's even weapons in here!";
+		break;
+	// final phrase (to be displayed if the player guesses the code with more than two attempts left)
+	case 12:
+		dialogueOutput = "\t\t\t\t\t\t\t   ACCESS GRANTED! Hell YES! Jackpot!! We're going to be set for weeks!";
+		break;
+	// to be displayed if player enters less than 4 characters
+	case 13:
+		dialogueOutput = "\t\t\t\t\t\t\tWell this isn't going to get me anywhere if I don't enter exactly 4 keys...";
+		break;
+	// to be displayed when player selects 'help'
+	case 14:
+		dialogueOutput = "\t\t\t\t\t\tI'm not getting anywhere on my own. I think I still have the manual Joel gave me... Here it is!";
+		break;
+	}
+	
 	return dialogueOutput;
 }
-
-
-//=======================================================================================
-//                               PRIVATE: MUTATOR METHODS
-//=======================================================================================
-	void Ellie::setEllieVariables() {
-		firstZero = new bool(true);
-		firstExplanationGiven = new bool(false);
-
-		string phrasesZero[7] = { "                            Ugh, not even close.                                 ", 
-			"                             Nope, that's for sure not it.                            ", 
-			"                           Annnnnd.... A whole lot of nada.                           ",
-			"                            Yep... still a big fat zero.                              ", 
-			"           At this rate, I'm going to need a flame thrower to get in here.            ",
-			"           C'mon, " + *playerName + "! \nI got this. \nEndure and Survive.            ",
-			" Why don't people write their keycodes on paper and leave them lying around anymore  ." };
-
-		zeroOptions = new string[*zeroSize];
-		zeroOptions = phrasesZero;
-
-		                                                       
-		string phrasesRepeat[3] = { "  Dammit, I've already tried that one. I need to think about this more carefully   .",
-			"                               I think I already...                                 \n                Yep, already tried it. C'mon " + *playerName + ", think!             ",
-			"        Well if it didn't work the last time I don't know why it would now...       " };
-
-		repeatOptions = new string[*repeatSize];
-		repeatOptions = phrasesRepeat;
-	}
-
-	void Ellie::resetEllieValues() {
-		*firstZero = true;
-		resetScore();
-	}
 	
 		
 	

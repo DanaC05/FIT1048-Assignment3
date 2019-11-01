@@ -1,3 +1,9 @@
-﻿  Mastermind.cpp
-C:\Users\User\source\repos\FIT1048-Assignment3\Mastermind.cpp(752,40): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+﻿  CustomPlayer.cpp
+  Mastermind.cpp
+C:\Users\User\source\repos\FIT1048-Assignment3\Mastermind.h(24,10): warning C4067:  unexpected tokens following preprocessor directive - expected a newline
+C:\Users\User\source\repos\FIT1048-Assignment3\Mastermind.cpp(129,88): warning C4267:  'argument': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\User\source\repos\FIT1048-Assignment3\Mastermind.cpp(164,42): warning C4267:  '=': conversion from 'size_t' to 'int', possible loss of data
+C:\Users\User\source\repos\FIT1048-Assignment3\Mastermind.cpp(817,32): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
+  Generating Code...
+C:\Users\User\source\repos\FIT1048-Assignment3\Mastermind.cpp(952,40): warning C4267:  'initializing': conversion from 'size_t' to 'int', possible loss of data
   Assignment3.vcxproj -> C:\Users\User\source\repos\FIT1048-Assignment3\x64\Debug\Assignment3.exe

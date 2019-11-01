@@ -1,22 +1,39 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Survivor Class File
+
+This class inherits from the MastermindBoard class
+and sets the parameters for the game board when
+playing the survivor level.
+**************************************************/
 #include "Survivor.h"
 
 //=======================================================================================
-//                                 PUBLIC: CONSTRUCTOR
+//                                 PUBLIC: CONSTRUCTORS
 //=======================================================================================
 Survivor::Survivor() {
 	maxAttempts = new int(14);
 	boardFileName = new string("gameBoards/survivorAndGroundedBoard.txt");
 	attemptsFileName = new string("previousAttempts/survivorAttempts.txt");
 	validSymbols = new string("letters a-z");
-	symbolGroup = new string("letter");
+	possibleCodeElements = new string("abcdefghijklmnopqrstuvwxyz");
 	boardSetup();
 }
 
+Survivor::~Survivor() {
+	delete libraryFileName;
+	delete librarySize;
+}
+
 //=======================================================================================
-//                                 PUBLIC: MUTATOR METHOD
+//                                 PUBLIC: ACCESS METHODS
 //=======================================================================================
-void Survivor::resetBoard() {
-	numAttempts = 0;
-	fill_n(playerAttempts, *maxAttempts, "");
-	fill_n(playerHints, *maxAttempts, "");
+string Survivor::wordLibraryName() {
+	return *libraryFileName;
+}
+
+int Survivor::wordLibrarySize() {
+	return *librarySize;
 }

@@ -1,3 +1,13 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Grounded Class File
+
+This class inherits from the MastermindBoard class 
+and sets the parameters for the game board when
+playing on level grounded.
+**************************************************/
 #include "Grounded.h"
 
 //=======================================================================================
@@ -8,31 +18,6 @@ Grounded::Grounded() {
 	boardFileName = new string("gameBoards/survivorAndGroundedBoard.txt");
 	attemptsFileName = new string("previousAttempts/groundedAttempts.txt");
 	validSymbols = new string("letters a-z");
-	symbolGroup = new string("letter");
+	possibleCodeElements = new string("abcdefghijklmnopqrstuvwxyz");
 	boardSetup();
-}
-
-Grounded::~Grounded() {
-	delete libraryFileName;
-	delete librarySize;
-}
-
-//=======================================================================================
-//                                 PUBLIC: MUTATOR METHOD
-//=======================================================================================
-string Grounded::wordLibraryName() {
-	return *libraryFileName;
-}
-
-int Grounded::wordLibrarySize() {
-	return *librarySize;
-}
-
-//=======================================================================================
-//                                 PUBLIC: MUTATOR METHOD
-//=======================================================================================
-void Grounded::resetBoard() {
-	numAttempts = 0;
-	fill_n(playerAttempts, *maxAttempts, "");
-	fill_n(playerHints, *maxAttempts, "");
 }

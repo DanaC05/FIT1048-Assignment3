@@ -10,8 +10,5 @@ int main() {
 	// start game
 	mastermind.startGame();
 
-	// test
-	//mastermind.testDisplay();
-
 	return 0;
 }

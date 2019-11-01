@@ -1,3 +1,9 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Board Class Header
+**************************************************/
 #ifndef BOARD_H
 #define BOARD_H
 
@@ -12,7 +18,7 @@ public:
 	~Board();
 
 	// abstract methods
-	virtual void displayBoard() = 0;
+	virtual void displayBoard(bool displayDesiredElements) = 0;
 	virtual void boardSetup() = 0;
 	
 	// accessor methods
@@ -20,9 +26,8 @@ public:
 	int getMaxAttempts();
 	bool maxAttemptsReached();
 
-	// mutator methods
+	// mutator method
 	void addAttempt();
-	void setMaxAttempts(int gameSize);
 
 protected:
 	// variables

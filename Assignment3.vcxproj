@@ -133,6 +133,7 @@
     <ClCompile Include="MastermindBoard.cpp" />
     <ClCompile Include="Normal.cpp" />
     <ClCompile Include="Player.cpp" />
+    <ClCompile Include="Scenario.cpp" />
     <ClCompile Include="Survivor.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -146,6 +147,7 @@
     <ClInclude Include="MastermindBoard.h" />
     <ClInclude Include="Normal.h" />
     <ClInclude Include="Player.h" />
+    <ClInclude Include="Scenario.h" />
     <ClInclude Include="Survivor.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

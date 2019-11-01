@@ -12,6 +12,5 @@ using namespace std;
 
 // global variables
 Mastermind mastermind;
-bool gameRunning = true;
 
 #endif //!APPLICATION_H

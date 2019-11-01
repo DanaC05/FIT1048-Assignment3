@@ -1,3 +1,9 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Grounded Class Header
+**************************************************/
 #ifndef GROUNDED_H
 #define GROUNDED_H
 
@@ -7,21 +13,8 @@ class Grounded :
 	public MastermindBoard
 {
 public:
-	// constructors
+	// constructor
 	Grounded();
-	~Grounded();
-
-	// accessor methods
-	string wordLibraryName();
-	int wordLibrarySize();
-
-	// mutator method
-	void resetBoard();
-
-private:
-	// variables
-	const string* libraryFileName = new string("wordLibraries/secretCodeLibrary.txt");
-	const int* librarySize = new int(167);
 };
 
 #endif // !GROUNDED_H

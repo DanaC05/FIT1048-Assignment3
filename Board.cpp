@@ -1,3 +1,12 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Board Class File
+
+This is an abstract class that acts as a generic 
+template for it's subclasses (game boards).
+**************************************************/
 #include "Board.h"
 
 //=======================================================================================
@@ -24,12 +33,8 @@ bool Board::maxAttemptsReached() {
 }
 
 //=======================================================================================
-//                               PUBLIC: MUTATOR METHODS
+//                               PUBLIC: MUTATOR METHOD
 //=======================================================================================
-void Board::setMaxAttempts(int gameSize) {
-	maxAttempts = new int(gameSize);
-}
-
 void Board::addAttempt() {
 	*numAttempts += 1;
 }

@@ -1,3 +1,9 @@
+/**************************************************
+Project: Mastermind: The Last Of Us Edition
+Assignment Num: 3
+Author: Dana Casella
+Purpose: Hard Class Header
+**************************************************/
 #ifndef HARD_H
 #define HARD_H
 
@@ -9,9 +15,6 @@ class Hard :
 public:
 	// constructor
 	Hard();
-
-	// mutator method
-	void resetBoard();
 };
 
 #endif // !HARD_H
