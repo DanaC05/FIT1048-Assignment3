@@ -945,7 +945,6 @@ void  Mastermind::playTurn() {
 			displayRelevantDialogue("", "");
 		}
 	}
-	cout << "\n" << *secretCode << "\n" << endl; ///////////////////////////// to be removed on relese - testing purposes only
 
 	// display player UI
 	printTextFile(*uiFileName);
