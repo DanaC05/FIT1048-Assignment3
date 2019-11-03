@@ -27,7 +27,7 @@ Purpose: Mastermind Class Header
 #include "Hard.h"
 #include "Survivor.h"
 #include "Grounded.h"
-#include "Scenario.h";
+#include "Scenario.h"
 using namespace std;
 
 class Mastermind

@@ -764,7 +764,7 @@ void Mastermind::displayRelevantDialogue(string hint, string guess) {
 
 	if (playerDialogue != "") {
 		// display player dialogue
-		cout << playerDialogue << endl;
+		cout << playerDialogue << "\n" << endl;
 	}
 }
 
